@@ -7,11 +7,11 @@ class LightSensor
 {
 private:
     uint8_t _pin;
-    boolean _isLowLight;
+    bool _isLowLight;
 
 public:
     LightSensor(uint8_t pin);
-    boolean isLowLight();
+    bool isLowLight();
     void read();
     void setup();
 };

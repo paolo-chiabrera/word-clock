@@ -6,6 +6,7 @@
 #include "LightSensor.h"
 #include "SensorHT.h"
 #include "Rotatory.h"
+#include "LedMatrix.h"
 
 // PINS
 #define SENSOR_HT_PIN 7
@@ -18,6 +19,7 @@
 #define RTM_RESET_PIN 2
 
 #define INTERVAL_TIME 5000
+#define LEDS_NUMBER 5000
 
 auto timer = timer_create_default();
 Button2 button = Button2(ROTATORY_RESET_PIN);
@@ -26,6 +28,7 @@ Clock clock(RTM_DATA_PIN, RTM_CLOCK_PIN, RTM_RESET_PIN);
 LightSensor lightSensor(LIGHT_SENSOR_PIN);
 Rotatory rotatory(ROTATORY_CLOCK_PIN, ROTATORY_DATA_PIN);
 SensorHT sensorHT(SENSOR_HT_PIN);
+LedMatrix ledMatrix(LEDS_NUMBER);
 
 // GLOBALS
 boolean isLowLight = false;
@@ -79,6 +82,7 @@ void setup()
     lightSensor.setup();
     rotatory.setup();
     sensorHT.setup();
+    ledMatrix.setup();
 
     // Button
     button.setClickHandler(clickHandler);
