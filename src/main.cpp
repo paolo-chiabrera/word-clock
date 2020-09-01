@@ -2,6 +2,7 @@
 #include "arduino-timer.h"
 #include "Button2.h"
 
+#include "Clock.h"
 #include "LightSensor.h"
 #include "SensorHT.h"
 #include "Rotatory.h"
@@ -9,17 +10,21 @@
 // PINS
 #define SENSOR_HT_PIN 7
 #define LIGHT_SENSOR_PIN 11
-#define ROTATORY_PIN_A 21      // CLOCK
-#define ROTATORY_PIN_B 20      // DATA
-#define ROTATORY_PIN_BUTTON 22 // RESET
+#define ROTATORY_CLOCK_PIN 21 // A
+#define ROTATORY_DATA_PIN 20  // B
+#define ROTATORY_RESET_PIN 22 // PRESS
+#define RTM_CLOCK_PIN 4
+#define RTM_DATA_PIN 3
+#define RTM_RESET_PIN 2
 
 #define INTERVAL_TIME 5000
 
 auto timer = timer_create_default();
-Button2 button = Button2(ROTATORY_PIN_BUTTON);
+Button2 button = Button2(ROTATORY_RESET_PIN);
 
+Clock clock(RTM_DATA_PIN, RTM_CLOCK_PIN, RTM_RESET_PIN);
 LightSensor lightSensor(LIGHT_SENSOR_PIN);
-Rotatory rotatory(ROTATORY_PIN_A, ROTATORY_PIN_B);
+Rotatory rotatory(ROTATORY_CLOCK_PIN, ROTATORY_DATA_PIN);
 SensorHT sensorHT(SENSOR_HT_PIN);
 
 // GLOBALS
@@ -70,6 +75,7 @@ void setup()
 {
     Serial.begin(9600);
 
+    clock.setup();
     lightSensor.setup();
     rotatory.setup();
     sensorHT.setup();
@@ -88,6 +94,7 @@ void setup()
 void loop()
 {
     button.loop();
+    clock.loop();
     rotatory.loop(onNegativeRotation, onPositiveRotation);
     timer.tick();
 }

@@ -27,6 +27,7 @@ void LightSensor::read()
 void LightSensor::setup()
 {
     pinMode(_pin, INPUT);
+    read();
 }
 
 boolean LightSensor::isLowLight()

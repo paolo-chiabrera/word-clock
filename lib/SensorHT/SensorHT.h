@@ -6,9 +6,9 @@
 
 class SensorHT {
     private:
-        DHT _dht;
+        DHT *_dht;
     public:
-        SensorHT(uint8_t pin, uint8_t type = DHT11): _dht(pin, type) {};
+        SensorHT(uint8_t pin, uint8_t type = DHT11);
         void setup();
         float getHumidity();
         float getTemperature();

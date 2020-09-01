@@ -2,13 +2,19 @@
 #include "DHT.h"
 #include "SensorHT.h"
 
-void SensorHT::setup()
+SensorHT::SensorHT(uint8_t pin, uint8_t type)
 {
-    _dht.begin();
+    _dht = new DHT(pin, type);
 }
 
-float SensorHT::getHumidity() {
-    float t = _dht.readHumidity();
+void SensorHT::setup()
+{
+    _dht->begin();
+}
+
+float SensorHT::getHumidity()
+{
+    float t = _dht->readHumidity();
     if (isnan(t))
     {
         return -1;
@@ -17,9 +23,11 @@ float SensorHT::getHumidity() {
     return t;
 }
 
-float SensorHT::getTemperature() {
-    float t = _dht.readTemperature();
-    if (isnan(t)) {
+float SensorHT::getTemperature()
+{
+    float t = _dht->readTemperature();
+    if (isnan(t))
+    {
         return -1;
     }
 
