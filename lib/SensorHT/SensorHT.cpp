@@ -2,7 +2,8 @@
 #include "DHT.h"
 #include "SensorHT.h"
 
-void SensorHT::begin() {
+void SensorHT::setup()
+{
     _dht.begin();
 }
 
