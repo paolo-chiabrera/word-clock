@@ -3,25 +3,29 @@
 
 LightSensor::LightSensor(uint8_t pin)
 {
-    _isLowLight = false;
+    _lightPerc = 0;
     _pin = pin;
 }
 
 void LightSensor::read()
 {
-    int cumulativeRead = 0;
+    double cumulativeRead = 0;
 
-    cumulativeRead += digitalRead(_pin);
+    cumulativeRead += analogRead(_pin);
     delay(50);
-    cumulativeRead += digitalRead(_pin);
+    cumulativeRead += analogRead(_pin);
     delay(50);
-    cumulativeRead += digitalRead(_pin);
+    cumulativeRead += analogRead(_pin);
     delay(50);
-    cumulativeRead += digitalRead(_pin);
+    cumulativeRead += analogRead(_pin);
     delay(50);
-    cumulativeRead += digitalRead(_pin);
+    cumulativeRead += analogRead(_pin);
 
-    _isLowLight = boolean(cumulativeRead > 2);
+    float average = cumulativeRead / 5.0;
+    float perc = average / 10.0;
+    float fixedPerc = round(perc * 10.0) / 10.0;
+
+    _lightPerc = fixedPerc > 1.0 ? 1.0 : fixedPerc;
 }
 
 void LightSensor::setup()
@@ -30,7 +34,8 @@ void LightSensor::setup()
     read();
 }
 
-boolean LightSensor::isLowLight()
+float LightSensor::getLightPerc()
 {
-    return _isLowLight;
+    read();
+    return _lightPerc;
 }

@@ -24,14 +24,8 @@ uint8_t Clock::getMinutes()
 
 void Clock::checkClockSetup(RtcDateTime compiled)
 {
-    if (!_rtc->IsDateTimeValid())
-    {
-        // Common Causes:
-        //    1) first time you ran and the device wasn't running yet
-        //    2) the battery on the device is low or even missing
-        Serial.println("RTC lost confidence in the DateTime!");
-        _rtc->SetDateTime(compiled);
-    }
+    _rtc->SetDateTime(compiled);
+    Serial.println("RTC updated with compile time!");
 
     if (_rtc->GetIsWriteProtected())
     {
@@ -43,22 +37,6 @@ void Clock::checkClockSetup(RtcDateTime compiled)
     {
         Serial.println("RTC was not actively running, starting now");
         _rtc->SetIsRunning(true);
-    }
-
-    RtcDateTime now = _rtc->GetDateTime();
-
-    if (now < compiled)
-    {
-        Serial.println("RTC is older than compile time!  (Updating DateTime)");
-        _rtc->SetDateTime(compiled);
-    }
-    else if (now > compiled)
-    {
-        Serial.println("RTC is newer than compile time. (this is expected)");
-    }
-    else if (now == compiled)
-    {
-        Serial.println("RTC is the same as compile time! (not expected but all is fine)");
     }
 }
 
@@ -72,11 +50,13 @@ void Clock::updateTimeFromRTC()
 void Clock::setup()
 {
     _rtc->Begin();
+    Serial.println(__TIME__);
     RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
     checkClockSetup(compiled);
     updateTimeFromRTC();
 }
 
-void Clock::loop() {
+void Clock::loop()
+{
     updateTimeFromRTC();
 }
